@@ -1,0 +1,191 @@
+<!DOCTYPE >
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plants VS Zombies</title>
+    <link rel="stylesheet" href="style.css">
+    </head>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Rubik+Wet+Paint&display=swap" rel="stylesheet">
+	<body>
+		<div class="fundo" id="fundo">
+			
+
+			<div id="div2" >
+
+			</div>
+
+			<!-- <div id="div3" >
+			</div>
+
+			<div id="div4" >
+			</div> -->
+
+			<div id="div1">
+				
+			</div>
+		</div>	
+		<div class="mensagem"></div>
+		<div class="painel">
+			<button type="button"  id="iniciar" >Iniciar</button><br>
+			<hr>
+			<button type="button"  id="acima" >Acima</button><br>
+			<button type="button"  id="baixo" >Abaixo</button><hr>
+			<hr>
+		
+		</div>
+		
+		<script>
+
+
+
+//*****  Funções  *******//
+
+
+
+function iniciar(){
+	// Posicionamento inicial
+	div1.style.left="15vw";
+	div1.style.top="15vw";	
+	PosicaoZumbi= Math.floor(Math.random() * 30)+5;
+	div2.style.left="90vw";
+	div2.style.top=`${PosicaoZumbi}vw`;
+
+	document.querySelector(".mensagem").innerHTML="";
+	timerDiv2 = setInterval("automaticoEsquerda()", 15); // Movimento automático
+	timerColisao = setInterval("colisao()", 5); // teste de colisão
+
+	//aqui q coloca pra so andar quando clicar
+	//ativa Botões do painel de controle celular
+	document.querySelector("#acima").addEventListener("touchstart", ()=>{move('acima')});
+	document.querySelector("#acima").addEventListener("touchend", parar);
+	document.querySelector("#baixo").addEventListener("touchstart",()=>{ move('baixo')});
+	document.querySelector("#baixo").addEventListener("touchend", parar);
+	//ativa Botões do painel de controle pc
+	document.querySelector("#acima").addEventListener("mousedown", ()=>{move('acima')});
+	document.querySelector("#acima").addEventListener("mouseup", parar);
+	document.querySelector("#baixo").addEventListener("mousedown",()=>{ move('baixo')});
+	document.querySelector("#baixo").addEventListener("mouseup", parar);
+
+	//deixa o botão iniciar invisivel
+	document.querySelector("#iniciar").style.visibility="hidden";
+}
+
+
+// mover div 2 - automático
+
+function automaticoEsquerda(){
+	let div2Left= parseInt(getComputedStyle(div2).left);
+	let div2Top= parseInt(getComputedStyle(div2).top);
+	let fundoWidth= parseInt(getComputedStyle(fundo).width);
+	let div2Width= parseInt(getComputedStyle(div2).width);
+
+	div2.style.left = div2Left -5;
+	div2.style.top = div2Top -0;
+	if ( div2Left <= 0){
+		ListaDeZumbis = ['Rocket_zombie_fire_walk.gif', 'Zombie_balloon.gif', 'Football_all-star_zombie_walk.gif', 'Icehead_walk.gif', 'Screendoor_walk.gif']
+		Zumbi = ListaDeZumbis[Math.floor(Math.random() * ListaDeZumbis.length)] 
+		div2.style=`background-image:url("${Zumbi}")`;
+		
+		PosicaoZumbi= Math.floor(Math.random() * 30)+5;
+		div2.style.left="90vw";
+		div2.style.top=`${PosicaoZumbi}vw`;
+		console.log(div2.style.top)
+
+
+
+	}
+}
+
+// Mover div 1  - através dos botões (alho)
+function move(Direcao) {
+
+	if (!parado) {
+		clearInterval(timerDiv1);
+	}
+
+	if (Direcao == "acima") {
+		timerDiv1 = setInterval("acima()",15);
+		parado = false;;
+	}
+
+	if (Direcao == "baixo") {
+		timerDiv1 = setInterval("baixo()",15);
+		parado = false;;
+	}
+}
+
+//os dois param no final da tela preta mas se vc ficar clicando de novo de de novo e passa pra tela branca, nn sei como consertar
+//a de baixo fica meio estranha
+function baixo() {
+	let div1Top= parseInt(getComputedStyle(div1).top);
+	let fundoHeight= parseInt(getComputedStyle(fundo).height);
+	let div1Height= parseInt(getComputedStyle(div1).height);
+
+	div1.style.top = div1Top+5;
+	if(div1Top >= 200 /*só funcionou quando mudei esse número, mas n sei oq colocar*/){
+		clearInterval(timerDiv1);
+	}
+}
+
+//a de cima funciona direito
+function acima() {
+	let div1Top= parseInt(getComputedStyle(div1).top);
+
+	div1.style.top = div1Top-5;
+	if(div1Top <= 0 ){
+	clearInterval(timerDiv1);
+	}
+}
+
+
+function parar(){
+	clearInterval(timerDiv1);
+}
+
+//Testa se ha colisão entre a div1 e a div2
+function colisao(){
+
+	//pega os dados da div1
+	let div1Left= parseInt(getComputedStyle(div1).left);
+	let div1Top= parseInt(getComputedStyle(div1).top);
+	let div1Height= parseInt(getComputedStyle(div1).height);
+	let div1Width= parseInt(getComputedStyle(div1).width);
+
+	//pega os dados da div2
+	let div2Left= parseInt(getComputedStyle(div2).left);
+	let div2Top= parseInt(getComputedStyle(div2).top);
+	let div2Height= parseInt(getComputedStyle(div2).height);
+	let div2Width= parseInt(getComputedStyle(div2).width);
+
+
+	//se div1 e div2 colidirem... parar as divs e o teste de colisão
+	if (((div1Left + div1Width >= div2Left)&&(div1Left <= div2Left + div2Width))&&
+		((div1Top + div2Height>= div2Top)&&(div1Top <= div2Top + div2Height))){
+			clearInterval(timerDiv1);
+			clearInterval(timerDiv2);
+			clearInterval(timerColisao);
+			document.querySelector(".mensagem").innerHTML="OS ZUMBIS COMERAM SEU CÉREBRO!";
+			document.querySelector("#iniciar").style.visibility="visible";
+
+	}
+
+}
+
+//Main
+//Ao carregar a página estas linhas são executadas.
+//Variáveis globais 
+let parado = true; //O div1 está parado?
+let cor = 0; // contador para mudança de cor
+let timerDiv1; //controlado pelos botões
+let timerDiv2; // Movimento automático
+let timerColisao; // teste de colisão
+
+//Adiciona o evento click no botão iniciar
+document.querySelector("#iniciar").addEventListener("click", ()=>{iniciar()});      
+
+		</script>
+	</body>
+</html>
