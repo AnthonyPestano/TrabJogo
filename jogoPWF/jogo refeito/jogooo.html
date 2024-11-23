@@ -125,7 +125,7 @@ function baixo() {
 	let div1Height= parseInt(getComputedStyle(div1).height);
 
 	div1.style.top = div1Top+5;
-	if(div1Top >= fundoHeight-5 /*nao fica perfeito, mas funciona no pc e celular*/){
+	if(div1Top >= fundoHeight+5 /*nao fica perfeito, mas funciona no pc e celular*/){
 		clearInterval(timerDiv1);
 	}
 }
