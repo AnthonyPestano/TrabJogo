@@ -125,7 +125,7 @@ function baixo() {
 	let div1Height= parseInt(getComputedStyle(div1).height);
 
 	div1.style.top = div1Top+5;
-	if(div1Top >= 175 /*só funcionou quando mudei esse número, mas n sei oq colocar*/){
+	if(div1Top >= fundoHeight-50 /*nao fica perfeito, mas funciona no pc e celular*/){
 		clearInterval(timerDiv1);
 	}
 }
